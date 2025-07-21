@@ -1,12 +1,12 @@
-import React from 'react';
-import Papa, { ParseResult } from 'papaparse';
+import React, { useContext } from 'react';
+import Papa, { type ParseResult } from 'papaparse';
+import { type CsvData } from '../data/DataContext';
+import { DataContextProvider } from '../data/DataContext';
 
-interface CsvData {
-  [key: string]: string | number | null | undefined;
-}
+const DataImporter = () => {
 
-const CsvImporter = () => {
-  const [ csvData, setCsvData ] = React.useState<CsvData[]>([]);
+  const dataContext = useContext(DataContextProvider);
+  // const [ csvData, setCsvData ] = React.useState<CsvData[]>([]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -16,7 +16,8 @@ const CsvImporter = () => {
         dynamicTyping: true,
         complete: (results: ParseResult<CsvData>) => {
           console.log("Parsed CSV data:", results.data);
-          setCsvData(results.data);
+          dataContext.setGames(results.data);
+          // setCsvData(results.data);
         },
         error: (error: unknown) => {
           console.error("Error parsing CSV file:", error);
@@ -25,11 +26,17 @@ const CsvImporter = () => {
     }
   };
 
-    return (
-      <div>
-        <input type="file" accept=".csv" onChange={handleFileChange} />
-        <div>
-          {
+  return (
+    <div>
+      {dataContext.data?.games?.length
+        ? (
+          <div>Games: {dataContext.data.games.length} (EDIT)</div>
+        ) : (
+          <div>
+            <input type="file" accept=".csv" onChange={handleFileChange} />
+          </div>
+        )}
+      {/* {
             csvData.length > 0 && (
               <table>
                 <thead>
@@ -57,10 +64,9 @@ const CsvImporter = () => {
                   }
                 </tbody>
               </table>
-            )}
-        </div>
-      </div>
-    );
+            )} */}
+    </div>
+  );
 }
 
-export default CsvImporter;
+export default DataImporter;
