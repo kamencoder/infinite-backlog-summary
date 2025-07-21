@@ -99,7 +99,7 @@ export type SummaryGameInfo = {
   platformAbbreviation: string;
   status: string;
   completion: string;
-  releaseDate: string | null;
+  releaseYear: string | null;
   acquisitionDate: string | null;
   completionDate: string | null;
   playTime: number | null;
@@ -122,6 +122,21 @@ export interface AcquisitionSummary {
   totalContinuous: number;
   percentPlayed: number;
   percentFinished: number;
+}
+
+
+export interface Summary {
+  year: number;
+  platformTotals: PlatformTotal[];
+  lengthGroupTotals: LengthGroupTotal[];
+  releaseDecadeTotals: ReleaseDecadeTotal[];
+  totalGamesBeaten: number;
+  totalGamesCompeleted: number;
+  totalTimeSpent: number;
+  averageTimeSpent: number;
+  acquisitions: AcquisitionSummary;
+  topGames: string[];
+  games: SummaryGameInfo[];
 }
 
 const getDecadeFromYear = (year: number | null): number => {
@@ -156,20 +171,6 @@ const getLengthGroupByTimePlayed = (timePlayed: number | null): LengthGroup => {
   } else {
     return LengthGroupEnum.extraextralong;
   }
-}
-
-export interface Summary {
-  year: number;
-  platformTotals: PlatformTotal[];
-  lengthGroupTotals: LengthGroupTotal[];
-  releaseDecadeTotals: ReleaseDecadeTotal[];
-  totalGamesBeaten: number;
-  totalGamesCompeleted: number;
-  totalTimeSpent: number;
-  averageTimeSpent: number;
-  acquisitions: AcquisitionSummary;
-  topGames: string[];
-  games: SummaryGameInfo[];
 }
 
 export const getYearSummary = (games: CsvData[], year: number): Summary => {
@@ -287,9 +288,9 @@ export const getYearSummary = (games: CsvData[], year: number): Summary => {
         platformAbbreviation,
         status,
         completion,
-        releaseDate: releaseDate ? releaseDate.toFormat('yyyy-MM-dd') : null,
-        acquisitionDate: acquisitionDate ? acquisitionDate.toFormat('yyyy-MM-dd') : null,
-        completionDate: completionDate ? completionDate.toFormat('yyyy-MM-dd') : null,
+        releaseYear: releaseDate?.year?.toString() || null,
+        acquisitionDate: acquisitionDate?.toFormat('MMM dd') || null,
+        completionDate: completionDate?.toFormat('MMM dd') || null,
         playTime,
       });
     }

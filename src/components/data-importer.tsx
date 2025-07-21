@@ -2,8 +2,22 @@ import React, { useContext } from 'react';
 import Papa, { type ParseResult } from 'papaparse';
 import { type CsvData } from '../data/DataContext';
 import { DataContextProvider } from '../data/DataContext';
+import { Button, styled } from '@mui/material';
+import { UploadFile } from '@mui/icons-material';
 
 const DataImporter = () => {
+
+  const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+  });
 
   const dataContext = useContext(DataContextProvider);
   // const [ csvData, setCsvData ] = React.useState<CsvData[]>([]);
@@ -28,12 +42,23 @@ const DataImporter = () => {
 
   return (
     <div>
-      {dataContext.data?.games?.length
-        ? (
-          <div>Games: {dataContext.data.games.length} (EDIT)</div>
-        ) : (
+      {!dataContext.data
+        && (
           <div>
-            <input type="file" accept=".csv" onChange={handleFileChange} />
+            <Button
+              component="label"
+              role={undefined}
+              variant="contained"
+              tabIndex={-1}
+              startIcon={<UploadFile />}
+            >
+              Load CSV
+              <VisuallyHiddenInput
+                type="file"
+                onChange={handleFileChange}
+                multiple
+              />
+            </Button>
           </div>
         )}
       {/* {

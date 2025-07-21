@@ -13,12 +13,12 @@ export const YearSummary = (props: YearSummaryProps) => {
   const sortedPlatformsByTotal = summary.platformTotals.sort((a, b) => b.total - a.total);
   const platforPie: PlatformPieTotal[] = sortedPlatformsByTotal.reduce((acc: PlatformPieTotal[], platform: PlatformTotal) => {
     if (platform.total === 1) {
-      const otherGroup = acc.find(p => p.platform === 'other');
+      const otherGroup = acc.find(p => p.platform === 'Other');
       if (otherGroup) {
         otherGroup.total += platform.total;
         otherGroup.otherPlatformDetails = [...otherGroup.otherPlatformDetails || [], platform.platform];
       } else {
-        acc.push({ platform: 'other', platformAbbreviation: 'other', total: platform.total, otherPlatformDetails: [platform.platform] });
+        acc.push({ platform: 'Other', platformAbbreviation: 'Other', total: platform.total, otherPlatformDetails: [platform.platform] });
       }
     } else {
       acc.push(platform);
@@ -38,36 +38,40 @@ export const YearSummary = (props: YearSummaryProps) => {
         <p>Average Time Spent: {summary.averageTimeSpent} hours</p>
         <p>Games Acquired: {summary.acquisitions.totalAcquired}</p>
         <h3>Platform Totals</h3>
-        <BarChart
-          dataset={sortedPlatformsByTotal as any}
-          yAxis={[{ dataKey: 'platformAbbreviation', scaleType: 'band', width: 200 }]}
-          // xAxis={[{ data: sortedPlatforms.map(p => p.platform) }]}
-          series={[{ dataKey: 'total' }]}
-          height={400}
-          width={800}
-          layout="horizontal"
-        />
-        <div style={{ width: '800px' }}>
-          <PieChart
-            series={[
-              {
-                data: platforPie.map(p => ({
-                  id: p.platform,
-                  label: `${p.platformAbbreviation} (${p.total})`,
-                  value: p.total
-                })),
-                arcLabel: (params) => params.label?.replace(/\(.+\)/, '') ?? '',
-                arcLabelMinAngle: 20,
-              },
-            ]}
-            slotProps={{
-              legend: {
-                direction: 'horizontal',
-                position: { vertical: 'bottom', horizontal: 'center' }
-              }
-            }}
-            height={400}
-          />
+        <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '30px' }}>
+          <div style={{ flex: 1, minWidth: '300px', maxWidth: '800px' }}>
+            <BarChart
+              dataset={sortedPlatformsByTotal as any}
+              yAxis={[{ dataKey: 'platformAbbreviation', scaleType: 'band', width: 200 }]}
+              // xAxis={[{ data: sortedPlatforms.map(p => p.platform) }]}
+              series={[{ dataKey: 'total' }]}
+              height={400}
+              layout="horizontal"
+            />
+          </div>
+          <div style={{ width: '300px' }}>
+            <PieChart
+              series={[
+                {
+                  data: platforPie.map(p => ({
+                    id: p.platform,
+                    label: `${p.platformAbbreviation} (${p.total})`,
+                    value: p.total
+                  })),
+                  arcLabel: (params) => params.label?.replace(/\(.+\)/, '') ?? '',
+                  arcLabelMinAngle: 20,
+
+                },
+              ]}
+              slotProps={{
+                legend: {
+                  direction: 'horizontal',
+                  position: { vertical: 'bottom', horizontal: 'center' }
+                }
+              }}
+              height={400}
+            />
+          </div>
         </div>
         <h3>Game Lengths</h3>
         <LineChart
@@ -108,27 +112,23 @@ export const YearSummary = (props: YearSummaryProps) => {
             <div>Done</div>
           </div>
         </div>
-        <h3>Games</h3>
+        <h3>Games Beaten/Completed</h3>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-          {summary.games.map((game, index) => (
+          {summary.games.filter(g => !!g.completionDate).map((game, index) => (
             <div style={{ border: '1px solid #ccc', gap: '10px', width: '200px' }} key={index}>
               <h4>{game.title} ({game.platformAbbreviation})</h4>
               <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
                 <div>
-                  <label>Status</label>: <span>{game.status}</span>
+                  {game.completion} on {game.completionDate}
                 </div>
                 <div>
-                  <label>Finish Date</label>: <span>{game.completionDate?.split('T')?.[0]}</span>
+                  <label>Released Year</label>: <span>{game.releaseYear}</span>
                 </div>
-                <div>
-                  <label>Release Date</label>: <span>{game.releaseDate?.split('T')?.[0]}</span>
-                </div>
-                <div>
-                  <label>Acquired Date</label>: <span>{game.acquisitionDate?.split('T')?.[0]}</span>
-                </div>
-                <div>
-                  <label>Play Time</label>: <span>{getPlayTimeInHours(game.playTime)}</span>
-                </div>
+                {game.playTime && (
+                  <div>
+                    <label>Play Time</label>: <span>{getPlayTimeInHours(game.playTime) + (game.playTime || 0 > 1 ? 'hrs' : 'hr')}</span>
+                  </div>
+                )}
               </div>
             </div>
           ))}
