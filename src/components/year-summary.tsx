@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { getPlayTimeInHours, type PlatformTotal, type Summary, type SummaryGameInfo } from '../data/summarizer';
 import { LineChart, PieChart, BarChart, Gauge } from '@mui/x-charts';
-import { green, blue } from '@mui/material/colors'
+import { green, blue, red } from '@mui/material/colors'
 import {
   Box,
   Card,
@@ -14,6 +14,7 @@ import {
   Divider,
   LinearProgress,
 } from '@mui/material';
+import { SingleStat } from './single-stat';
 
 export interface YearSummaryProps {
   summary: Summary
@@ -54,6 +55,7 @@ export const YearSummary = (props: YearSummaryProps) => {
     return monthData;
   }, [summary.games]);
 
+  const totalTimeSpent = getPlayTimeInHours(summary.totalTimeSpent) || 0;
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
@@ -65,10 +67,10 @@ export const YearSummary = (props: YearSummaryProps) => {
             <CardContent>
               <Typography variant="h6">Totals</Typography>
               <Divider sx={{ my: 1 }} />
-              <Stack spacing={1}>
-                <Typography>Total Games Finished: <b>{summary.totalGamesBeaten + summary.totalGamesCompeleted}</b></Typography>
-                <Typography>Total Time Spent: <b>{getPlayTimeInHours(summary.totalTimeSpent)} hours</b></Typography>
-                <Typography>Games Acquired: <b>{summary.acquisitions.totalAcquired}</b></Typography>
+              <Stack spacing={1} direction="row">
+                <SingleStat value={summary.totalGamesBeaten + summary.totalGamesCompeleted} label="Games Finished" color={green[500]} />
+                <SingleStat value={totalTimeSpent} label="Hours Played" color={blue[500]} />
+                <SingleStat value={summary.acquisitions.totalAcquired} label="Games Acquired" color={red[500]} />
               </Stack>
             </CardContent>
           </Card>
@@ -181,9 +183,11 @@ export const YearSummary = (props: YearSummaryProps) => {
               <Typography variant="h6" gutterBottom>Acquisitions</Typography>
               <Grid container spacing={2}>
                 <Grid size={4}>
-                  <div>Total Acquired <b>{summary.acquisitions.totalAcquired}</b></div>
-                  <div>Total Played <b>{summary.acquisitions.totalAcquired}</b></div>
-                  <div>Total Done <b>{summary.acquisitions.totalAcquired}</b></div>
+                  <Stack spacing={1}>
+                    <SingleStat value={summary.acquisitions.totalAcquired} label="Acquired" color={red[500]} />
+                    <SingleStat value={summary.acquisitions.totalPlayed} label="Played" color={blue[500]} />
+                    <SingleStat value={summary.acquisitions.totalFinished} label="Finished" color={green[500]} />
+                  </Stack>
                 </Grid>
                 <Grid size={8}>
                   <PieChart
@@ -194,7 +198,7 @@ export const YearSummary = (props: YearSummaryProps) => {
                         id: 'played',
                         data: [
                           { id: 'Played', label: 'Played', value: summary.acquisitions.totalPlayed, color: blue[900] },
-                          { id: 'Not Played', label: 'Not Played', value: summary.acquisitions.totalAcquired - summary.acquisitions.totalPlayed, color: blue[100] }
+                          { id: 'Not Played', label: 'Not Played', value: summary.acquisitions.totalAcquired - summary.acquisitions.totalPlayed, color: blue[300] }
                         ],
                         arcLabel: (params) => params.label?.includes('Not') ? '' : params.label || '',
                         arcLabelMinAngle: 20,
@@ -205,7 +209,7 @@ export const YearSummary = (props: YearSummaryProps) => {
                         id: 'OS-series',
                         data: [
                           { id: 'Done', label: 'Done', value: summary.acquisitions.totalFinished, color: green[900] },
-                          { id: 'Not Done', label: 'Not Done', value: summary.acquisitions.totalAcquired - summary.acquisitions.totalFinished, color: green[100] }
+                          { id: 'Not Done', label: 'Not Done', value: summary.acquisitions.totalAcquired - summary.acquisitions.totalFinished, color: green[300] }
                         ],
                         arcLabel: (params) => params.label?.includes('Not') ? '' : params.label || '',
                         arcLabelMinAngle: 20,
@@ -256,7 +260,7 @@ export const YearSummary = (props: YearSummaryProps) => {
           ))}
         </Grid>
       </Grid>
-    </Box>
+    </Box >
   );
 }
 
