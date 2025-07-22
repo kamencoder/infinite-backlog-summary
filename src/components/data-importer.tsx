@@ -42,7 +42,7 @@ const DataImporter = () => {
 
   return (
     <div>
-      {!dataContext.data
+      {!dataContext?.data?.games?.length
         && (
           <div>
             <Button
