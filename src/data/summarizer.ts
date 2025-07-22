@@ -94,6 +94,7 @@ const platformAbbreviations: { [key: string]: string } = {
 }
 
 export type SummaryGameInfo = {
+  id: string;
   title: string;
   platform: string;
   platformAbbreviation: string;
@@ -200,7 +201,8 @@ export const getYearSummary = (games: CsvData[], year: number): Summary => {
     games: [],
   }
 
-  games.forEach(game => {
+  games.forEach((game, i) => {
+    const id = game['IGDB ID']?.toString() || `unknown_${i}`;
     const title = game['Game name']?.toString() || 'Unknown Title';
     const platform = game['Platform']?.toString() || 'Unknown';
     const platformAbbreviation = `${platformAbbreviations[platform] || platform}`
@@ -275,6 +277,7 @@ export const getYearSummary = (games: CsvData[], year: number): Summary => {
 
     if (gameIncluded) {
       summary.games.push({
+        id,
         title,
         platform,
         platformAbbreviation,
