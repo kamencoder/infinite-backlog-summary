@@ -57,7 +57,7 @@ export const YearSummary = (props: YearSummaryProps) => {
 
   const totalTimeSpent = getPlayTimeInHours(summary.totalTimeSpent) || 0;
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: 3 }} id='year-summary-container'>
       <Typography variant="h4" gutterBottom>
         Year Summary ({summary.year})
       </Typography>
@@ -67,7 +67,10 @@ export const YearSummary = (props: YearSummaryProps) => {
             <CardContent>
               <Typography variant="h6">Totals</Typography>
               <Divider sx={{ my: 1 }} />
-              <Stack spacing={1} direction="row">
+              <Stack spacing={1} direction="row" sx={{
+                justifyContent: "center",
+                alignItems: "center"
+              }}>
                 <SingleStat value={summary.totalGamesBeaten + summary.totalGamesCompeleted} label="Games Finished" color={green[500]} />
                 <SingleStat value={totalTimeSpent} label="Hours Played" color={blue[500]} />
                 <SingleStat value={summary.acquisitions.totalAcquired} label="Games Acquired" color={red[500]} />

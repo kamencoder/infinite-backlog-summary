@@ -11,7 +11,7 @@ export const SingleStat = (props: SingleStatProps) => {
   return (
     <div className="single-stat">
       <Box style={{ backgroundColor: color, padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
-        <div><Typography fontSize={20}>{value}</Typography></div>
+        <div><Typography fontSize={20} fontWeight={900}>{value}</Typography></div>
         <div><Typography>{label}</Typography></div>
       </Box>
     </div>

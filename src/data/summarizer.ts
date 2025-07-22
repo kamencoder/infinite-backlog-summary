@@ -263,7 +263,6 @@ export const getYearSummary = (games: CsvData[], year: number): Summary => {
     }
 
     if (acquisitionYear && acquisitionYear >= year && acquisitionYear < (year + 1)) {
-      console.log('Acquisition year:', acquisitionYear, 'for game:', title);
       gameIncluded = true;
       summary.acquisitions.totalAcquired += 1;
       summary.acquisitions.totalBeaten += (completion === 'Beaten' ? 1 : 0);
@@ -272,15 +271,6 @@ export const getYearSummary = (games: CsvData[], year: number): Summary => {
       summary.acquisitions.totalContinuous += (completion === 'Continuous' ? 1 : 0);
       summary.acquisitions.totalFinished += (['Beaten', 'Completed', 'Continuous', 'Dropped'].includes(completion) ? 1 : 0);
       summary.acquisitions.totalPlayed += (status === 'Played' || status === 'Playing' ? 1 : 0);
-    } else {
-      if (acquisitionDateRaw) {
-        console.warn(`Game "${title}" has an acquisition date but is not included in the summary for year ${year}.`, {
-          acquisitionDate: acquisitionDate,
-          acquisitionYear: acquisitionYear,
-          year: year,
-          acquisitionDateRaw: acquisitionDateRaw,
-        });
-      }
     }
 
     if (gameIncluded) {
