@@ -14,4 +14,8 @@ export interface CsvData {
   [key: string]: string | number | null | undefined;
 }
 
-export const DataContextProvider = React.createContext<DataContextProps>({});
+const defaultContext: DataContextProps = {
+  data: {}
+} as DataContextProps;
+
+export const DataContextProvider = React.createContext<DataContextProps>(defaultContext);

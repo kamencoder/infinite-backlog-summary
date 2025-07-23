@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import './App.css'
 import CsvImporter from './components/data-importer'
 import { type Data, DataContextProvider } from './data/DataContext';

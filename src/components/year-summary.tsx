@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { getPlayTimeInHours, type PlatformTotal, type Summary, type SummaryGameInfo } from '../data/summarizer';
-import { LineChart, PieChart, BarChart, Gauge } from '@mui/x-charts';
+import { LineChart, PieChart, BarChart } from '@mui/x-charts';
 import { green, blue, red } from '@mui/material/colors'
 import {
   Box,
@@ -9,10 +9,8 @@ import {
   Typography,
   Grid,
   Paper,
-  Chip,
   Stack,
   Divider,
-  LinearProgress,
   Accordion,
   AccordionSummary,
   AccordionDetails,
