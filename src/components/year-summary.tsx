@@ -13,7 +13,17 @@ import {
   Stack,
   Divider,
   LinearProgress,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  TableContainer,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableHead,
 } from '@mui/material';
+import { ExpandMore } from '@mui/icons-material'
 import { SingleStat } from './single-stat';
 import { DateTime } from 'luxon';
 
@@ -224,21 +234,64 @@ export const YearSummary = (props: YearSummaryProps) => {
                     height={300}
                   />
                 </Grid>
+                <Grid size={12}>
+                  <Accordion>
+                    <AccordionSummary
+                      expandIcon={<ExpandMore />}
+                    >
+                      <Typography component="span">Acquired Game List</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      {/* <Stack justifyContent="flex-start">
+                        {summary.games.filter(g => g.acquiredThisYear).map(g => (
+                          <div style={{ textAlign: 'left' }}>
+                            {g.title} ({g.platformAbbreviation})- {g.acquisitionDate}
+                          </div>
+                        ))}
+                      </Stack> */}
+                      <TableContainer component={Paper}>
+                        <Table sx={{ minWidth: 650 }} aria-label="Acquired Games">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Title</TableCell>
+                              <TableCell>Platform</TableCell>
+                              <TableCell>Date Acquired</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {summary.games.filter(g => g.acquiredThisYear).map(g => (
+                              // {g.title} ({g.platformAbbreviation})- {g.acquisitionDate}
+                              <TableRow
+                                key={g.id}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                              >
+                                <TableCell component="th" scope="row">{g.title}</TableCell>
+                                <TableCell>{g.platform}</TableCell>
+                                <TableCell>{g.acquisitionDate}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
               </Grid>
 
             </CardContent>
           </Card>
         </Grid>
-        <Typography variant="h5" gutterBottom>Games Beaten/Completed</Typography>
+        <Typography variant="h3">Games Finished</Typography>
         <Grid size={12}>
           {gamesByMonth && Object.keys(gamesByMonth).map(month => (
             <Card variant="outlined" key={month} >
               <CardContent>
-                <Typography key={month} variant="h6" style={{ textAlign: 'left' }}>{month}</Typography>
+                <Typography key={month} variant="h6" fontWeight={600} style={{ textAlign: 'left' }} gutterBottom>{month}</Typography>
                 <Grid container spacing={4}>
                   {
                     gamesByMonth[month].gamesFinished.map((game, index) => (
                       <Grid size={2} minWidth={160} key={index}>
+                        {/* <div style={{ position: "relative" }}> */}
                         <Card sx={{ height: '100%', width: "180px" }}>
                           <CardContent>
                             <img src={game.coverImage || ''} style={{ objectFit: "cover", width: "140px" }} />
@@ -257,6 +310,8 @@ export const YearSummary = (props: YearSummaryProps) => {
                             </Stack>
                           </CardContent>
                         </Card>
+                        {/* {game.completion === 'Completed' && (<div style={{ width: '16px', height: '20px', position: 'absolute', bottom: "12px", right: "-6px", borderRadius: "50%", fontSize: '20px' }}>⭐</div>)} */}
+                        {/* </div> */}
                       </Grid>
                     ))
                   }

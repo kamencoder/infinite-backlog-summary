@@ -103,6 +103,7 @@ export type SummaryGameInfo = {
   releaseYear: string | null;
   acquisitionDate: string | null;
   acquisitionMonth: string | null;
+  acquiredThisYear: boolean;
   completionDate: string | null;
   completionMonth: string | null;
   playTime: number | null;
@@ -266,8 +267,10 @@ export const getYearSummary = (games: CsvData[], year: number): Summary => {
       }
     }
 
+    let acquiredThisYear = false;
     if (acquisitionYear && acquisitionYear >= year && acquisitionYear < (year + 1)) {
       gameIncluded = true;
+      acquiredThisYear = true;
       summary.acquisitions.totalAcquired += 1;
       summary.acquisitions.totalBeaten += (completion === 'Beaten' ? 1 : 0);
       summary.acquisitions.totalCompleted += (completion === 'Completed' ? 1 : 0);
@@ -292,6 +295,7 @@ export const getYearSummary = (games: CsvData[], year: number): Summary => {
         completionMonth: completionDate ? completionDate.monthLong : null,
         playTime,
         coverImage,
+        acquiredThisYear,
       });
     }
   });
