@@ -106,6 +106,7 @@ export type SummaryGameInfo = {
   completionDate: string | null;
   completionMonth: string | null;
   playTime: number | null;
+  coverImage: string | null;
 }
 
 export type LengthGroup = typeof LengthGroupEnum[keyof typeof LengthGroupEnum];
@@ -217,6 +218,7 @@ export const getYearSummary = (games: CsvData[], year: number): Summary => {
     const completionDate = completionDateRaw ? DateTime.fromISO(completionDateRaw, { setZone: true }) : null;
     const completionYear = completionDate?.year;
     const playTime = game['Playtime'] ? parseInt(game['Playtime'].toString()) : null
+    const coverImage = game['Cover']?.toString() || null;
 
     let gameIncluded = false;
     if (completionYear && completionYear >= year && completionYear < (year + 1)) {
@@ -285,10 +287,11 @@ export const getYearSummary = (games: CsvData[], year: number): Summary => {
         completion,
         releaseYear: releaseDate?.year?.toString() || null,
         acquisitionDate: acquisitionDate?.toFormat('MMM dd') || null,
-        acquisitionMonth: acquisitionDate ? acquisitionDate.toFormat('MMMM') : null,
+        acquisitionMonth: acquisitionDate ? acquisitionDate.monthLong : null,
         completionDate: completionDate?.toFormat('MMM dd') || null,
-        completionMonth: completionDate ? completionDate.toFormat('MMMM') : null,
+        completionMonth: completionDate ? completionDate.monthLong : null,
         playTime,
+        coverImage,
       });
     }
   });

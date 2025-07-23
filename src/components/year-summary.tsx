@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { getPlayTimeInHours, type PlatformTotal, type Summary, type SummaryGameInfo } from '../data/summarizer';
 import { LineChart, PieChart, BarChart, Gauge } from '@mui/x-charts';
 import { green, blue, red } from '@mui/material/colors'
@@ -15,6 +15,7 @@ import {
   LinearProgress,
 } from '@mui/material';
 import { SingleStat } from './single-stat';
+import { DateTime } from 'luxon';
 
 export interface YearSummaryProps {
   summary: Summary
@@ -43,12 +44,14 @@ export const YearSummary = (props: YearSummaryProps) => {
 
   const gamesByMonth = useMemo(() => {
     const monthData = summary.games?.reduce((acc: Record<string, { gamesFinished: SummaryGameInfo[] }>, game) => {
-      if (game.completionMonth) {
-        if (!acc[game.completionMonth]) {
-          acc[game.completionMonth] = { gamesFinished: [game] };
-        } else {
-          acc[game.completionMonth].gamesFinished.push(game);
+      if (Object.keys(acc).length === 0) {
+        for (let i = 1; i <= 12; i++) {
+          const month = DateTime.fromFormat(`2020-${i.toString().padStart(2, '0')}-01`, 'yyyy-MM-dd').monthLong || 'unknown';
+          acc[month] = { gamesFinished: [] };
         }
+      }
+      if (game.completionMonth) {
+        acc[game.completionMonth]?.gamesFinished.push(game);
       }
       return acc;
     }, {} as Record<string, { gamesFinished: SummaryGameInfo[] }>) || {};
@@ -78,7 +81,7 @@ export const YearSummary = (props: YearSummaryProps) => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid size={12}>
+        <Grid size={12} container>
           <Card variant="outlined">
             <CardContent>
               <Typography variant="h6" gutterBottom>Platform Totals</Typography>
@@ -185,14 +188,14 @@ export const YearSummary = (props: YearSummaryProps) => {
             <CardContent>
               <Typography variant="h6" gutterBottom>Acquisitions</Typography>
               <Grid container spacing={2}>
-                <Grid size={4}>
+                <Grid size={3}>
                   <Stack spacing={1}>
                     <SingleStat value={summary.acquisitions.totalAcquired} label="Acquired" color={red[500]} />
                     <SingleStat value={summary.acquisitions.totalPlayed} label="Played" color={blue[500]} />
                     <SingleStat value={summary.acquisitions.totalFinished} label="Finished" color={green[500]} />
                   </Stack>
                 </Grid>
-                <Grid size={8}>
+                <Grid size={9}>
                   <PieChart
                     series={[
                       {
@@ -229,26 +232,26 @@ export const YearSummary = (props: YearSummaryProps) => {
         <Typography variant="h5" gutterBottom>Games Beaten/Completed</Typography>
         <Grid size={12}>
           {gamesByMonth && Object.keys(gamesByMonth).map(month => (
-            <Card variant="outlined" key={month} style={{ marginBottom: '16px' }}>
+            <Card variant="outlined" key={month} >
               <CardContent>
                 <Typography key={month} variant="h6" style={{ textAlign: 'left' }}>{month}</Typography>
-                <Grid container spacing={2}>
+                <Grid container spacing={4}>
                   {
                     gamesByMonth[month].gamesFinished.map((game, index) => (
                       <Grid size={2} minWidth={160} key={index}>
-                        <Card variant="outlined" sx={{ height: '100%' }}>
+                        <Card sx={{ height: '100%', width: "180px" }}>
                           <CardContent>
-                            <Typography variant="subtitle1" fontWeight="bold">
-                              {game.title} ({game.platformAbbreviation})
+                            <img src={game.coverImage || ''} style={{ objectFit: "cover", width: "140px" }} />
+                            <Typography variant="body1" fontWeight="bold">
+                              {game.title}
                             </Typography>
                             <Stack spacing={1} mt={1}>
-                              {game.completion === 'Completed' && <Chip label={'Complete'} color="primary" size="small" />}
                               <Typography variant="body2">
-                                <b>Released:</b> {game.releaseYear}
+                                {game.platformAbbreviation} - {game.releaseYear}
                               </Typography>
                               {game.playTime && (
                                 <Typography variant="body2">
-                                  <b>Time:</b> {getPlayTimeInHours(game.playTime) + ((game.playTime || 0) > 1 ? ' hrs' : ' hr')}
+                                  {getPlayTimeInHours(game.playTime) + ((game.playTime || 0) > 1 ? ' hrs' : ' hr')}
                                 </Typography>
                               )}
                             </Stack>
