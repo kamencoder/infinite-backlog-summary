@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import Papa, { type ParseResult } from 'papaparse';
 import { type CsvData } from '../data/DataContext';
 import { DataContextProvider } from '../data/DataContext';
-import { Button, styled } from '@mui/material';
-import { UploadFile } from '@mui/icons-material';
+import { Box, Button, Container, Link, List, ListItem, styled, Typography } from '@mui/material';
+import { Anchor, UploadFile } from '@mui/icons-material';
 
 const DataImporter = () => {
 
@@ -41,56 +41,52 @@ const DataImporter = () => {
   };
 
   return (
-    <div>
+    <>
       {!dataContext?.data?.games?.length
         && (
-          <div>
-            <Button
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="100vh"
+            flexDirection="column"
+          >
+            <Typography variant='subtitle1'>Infinite Backlog</Typography>
+            <Typography variant='h2' gutterBottom>Yearly Summary</Typography>
+            <Box sx={{ alignItems: "left", marginBottom: "16px" }} >
+              <List >
+                <ListItem>
+                  <Typography variant='body2'>1. Navigate to <Link href="https://infinitebacklog.net/settings/export">Infinite Backlog Export Page.</Link></Typography>
+                </ListItem>
+                <ListItem>
+                  <Typography variant='body2'>2. Export "Game Collection" to a CSV files.</Typography>
+                </ListItem>
+                <ListItem>
+                  <Typography variant='body2'>3. Click Load CSV here and import the file.</Typography>
+                </ListItem>
+              </List>
+            </Box >
+            {/* <Container style={{ alignContent: 'center', justifyContent: 'center', width: '100%', height: '100%' }}> */}
+            < Button
               component="label"
               role={undefined}
               variant="contained"
-              tabIndex={-1}
-              startIcon={<UploadFile />}
+              tabIndex={- 1
+              }
+              startIcon={< UploadFile />}
             >
               Load CSV
-              <VisuallyHiddenInput
+              < VisuallyHiddenInput
                 type="file"
                 onChange={handleFileChange}
                 multiple
               />
-            </Button>
-          </div>
+            </Button >
+            {/* </Container> */}
+
+          </Box >
         )}
-      {/* {
-            csvData.length > 0 && (
-              <table>
-                <thead>
-                  <tr>
-                    {
-                      Object.keys(csvData[0] ?? {}).map((key) => (
-                        <th key={key} > {key} </th>
-                      ))
-                    }
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    csvData.map((row, index) => (
-                      <tr key={index} >
-                        {
-                          row && Object.values(row).map((value, idx) =>{
-                            return (
-                              <td key={idx} > {String(value) ?? ''} </td>
-                            )
-                          })
-                        }
-                      </tr>
-                    ))
-                  }
-                </tbody>
-              </table>
-            )} */}
-    </div>
+    </>
   );
 }
 

@@ -197,7 +197,7 @@ export const YearSummary = (props: YearSummaryProps) => {
               <Typography variant="h6" gutterBottom>Acquisitions</Typography>
               <Grid container spacing={2}>
                 <Grid size={{ xs: 12, md: 3 }}>
-                  <Stack spacing={1}>
+                  <Stack spacing={1} flexWrap="wrap">
                     <SingleStat value={summary.acquisitions.totalAcquired} label="Acquired" color={red[500]} />
                     <SingleStat value={summary.acquisitions.totalPlayed} label="Played" color={blue[500]} />
                     <SingleStat value={summary.acquisitions.totalFinished} label="Finished" color={green[500]} />

@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import './App.css'
 import CsvImporter from './components/data-importer'
 import { type Data, DataContextProvider } from './data/DataContext';
 import { getYearSummary } from './data/summarizer';
@@ -7,7 +6,7 @@ import YearSummary from './components/year-summary';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Download } from '@mui/icons-material'
 import CssBaseline from '@mui/material/CssBaseline';
-import { Button } from '@mui/material';
+import { Button, Container } from '@mui/material';
 
 function App() {
   const [data, setData] = useState<Data>({});
@@ -35,25 +34,23 @@ function App() {
             data,
             setGames: (games) => setData({ ...data, games: games })
           }}>
-          <CsvImporter />
-          {summary && (
-            <div>
-              {/* Collapsible section with list of games */}
+          <>
+            <CsvImporter />
+            {summary && (
               <YearSummary summary={summary} />
-            </div>
-          )}
-          {data.games && (
-            <Button
-              component="label"
-              variant="contained"
-              tabIndex={-1}
-              startIcon={<Download />}
-              onClick={() => window.print()}
-            >
-              Export
-            </Button>
-          )
-          }
+            )}
+            {data.games && (
+              <Button
+                component="label"
+                variant="contained"
+                tabIndex={-1}
+                startIcon={<Download />}
+                onClick={() => window.print()}
+              >
+                Export
+              </Button>
+            )}
+          </>
         </DataContextProvider>
 
       </ThemeProvider>
