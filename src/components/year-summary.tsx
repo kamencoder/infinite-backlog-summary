@@ -94,7 +94,7 @@ export const YearSummary = (props: YearSummaryProps) => {
             <CardContent>
               <Typography variant="h6" gutterBottom>Platform Totals</Typography>
               <Grid container spacing={2}>
-                <Grid size={8}>
+                <Grid size={{ xs: 12, md: 8 }}>
                   <BarChart
                     dataset={sortedPlatformsByTotal as any}
                     yAxis={[{ dataKey: 'platformAbbreviation', scaleType: 'band', width: 120 }]}
@@ -103,7 +103,7 @@ export const YearSummary = (props: YearSummaryProps) => {
                     layout="horizontal"
                   />
                 </Grid>
-                <Grid size={4}>
+                <Grid size={{ xs: 12, md: 4 }}>
                   <PieChart
                     series={[
                       {
@@ -156,7 +156,7 @@ export const YearSummary = (props: YearSummaryProps) => {
               <Typography variant="h6" gutterBottom>Release Decade Totals</Typography>
 
               <Grid container spacing={2}>
-                <Grid size={8}>
+                <Grid size={{ xs: 12, md: 8 }}>
                   <BarChart
                     title="Release Decade Totals"
                     dataset={summary.releaseDecadeTotals as any}
@@ -165,7 +165,7 @@ export const YearSummary = (props: YearSummaryProps) => {
                     height={250}
                   />
                 </Grid>
-                <Grid size={4}>
+                <Grid size={{ xs: 12, md: 4 }}>
                   <PieChart
                     series={[
                       {
@@ -196,14 +196,14 @@ export const YearSummary = (props: YearSummaryProps) => {
             <CardContent>
               <Typography variant="h6" gutterBottom>Acquisitions</Typography>
               <Grid container spacing={2}>
-                <Grid size={3}>
+                <Grid size={{ xs: 12, md: 3 }}>
                   <Stack spacing={1}>
                     <SingleStat value={summary.acquisitions.totalAcquired} label="Acquired" color={red[500]} />
                     <SingleStat value={summary.acquisitions.totalPlayed} label="Played" color={blue[500]} />
                     <SingleStat value={summary.acquisitions.totalFinished} label="Finished" color={green[500]} />
                   </Stack>
                 </Grid>
-                <Grid size={9}>
+                <Grid size={{ xs: 12, md: 9 }}>
                   <PieChart
                     series={[
                       {
@@ -229,6 +229,12 @@ export const YearSummary = (props: YearSummaryProps) => {
                         arcLabelMinAngle: 20,
                       },
                     ]}
+                    slotProps={{
+                      legend: {
+                        direction: 'horizontal',
+                        position: { vertical: 'bottom', horizontal: 'center' }
+                      }
+                    }}
                     height={300}
                   />
                 </Grid>
@@ -248,7 +254,7 @@ export const YearSummary = (props: YearSummaryProps) => {
                         ))}
                       </Stack> */}
                       <TableContainer component={Paper}>
-                        <Table sx={{ minWidth: 650 }} aria-label="Acquired Games">
+                        <Table aria-label="Acquired Games">
                           <TableHead>
                             <TableRow>
                               <TableCell>Title</TableCell>
@@ -288,7 +294,7 @@ export const YearSummary = (props: YearSummaryProps) => {
                 <Grid container spacing={4}>
                   {
                     gamesByMonth[month].gamesFinished.map((game, index) => (
-                      <Grid size={2} minWidth={160} key={index}>
+                      <Grid size={{ xs: 6, md: 2 }} minWidth={160} key={index}>
                         {/* <div style={{ position: "relative" }}> */}
                         <Card sx={{ height: '100%', width: "180px" }}>
                           <CardContent>
