@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import Papa, { type ParseResult } from 'papaparse';
 import { type CsvData } from '../data/DataContext';
 import { DataContextProvider } from '../data/DataContext';
-import { Box, Button, Container, Link, List, ListItem, styled, Typography } from '@mui/material';
-import { Anchor, UploadFile } from '@mui/icons-material';
+import { Box, Button, Link, List, ListItem, styled, Typography } from '@mui/material';
+import { UploadFile } from '@mui/icons-material';
 
 const DataImporter = () => {
 

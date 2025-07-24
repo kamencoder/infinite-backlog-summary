@@ -6,7 +6,7 @@ import YearSummary from './components/year-summary';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Download } from '@mui/icons-material'
 import CssBaseline from '@mui/material/CssBaseline';
-import { Button, Container } from '@mui/material';
+import { Button } from '@mui/material';
 
 function App() {
   const [data, setData] = useState<Data>({});
