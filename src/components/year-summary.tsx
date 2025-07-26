@@ -1,6 +1,7 @@
 import { useContext, useMemo } from 'react';
 import { getPlayTimeInHours, type PlatformTotal, type SummaryGameInfo } from '../data/summarizer';
 import { LineChart, PieChart, BarChart } from '@mui/x-charts';
+import { GaugeComponent } from 'react-gauge-component';
 import { green, blue, red } from '@mui/material/colors'
 import {
   Box,
@@ -212,39 +213,60 @@ export const YearSummary = () => {
                   </Stack>
                 </Grid>
                 <Grid size={{ xs: 12, md: 9 }}>
-                  <PieChart
-                    series={[
-                      {
-                        innerRadius: 20,
-                        outerRadius: 80,
-                        id: 'played',
-                        data: [
-                          { id: 'Played', label: 'Played', value: summary.acquisitions.totalPlayed, color: blue[900] },
-                          { id: 'Not Played', label: 'Not Played', value: summary.acquisitions.totalAcquired - summary.acquisitions.totalPlayed, color: blue[300] }
-                        ],
-                        arcLabel: (params) => params.label?.includes('Not') ? '' : params.label || '',
-                        arcLabelMinAngle: 20,
-                      },
-                      {
-                        innerRadius: 81,
-                        outerRadius: 141,
-                        id: 'OS-series',
-                        data: [
-                          { id: 'Done', label: 'Done', value: summary.acquisitions.totalFinished, color: green[900] },
-                          { id: 'Not Done', label: 'Not Done', value: summary.acquisitions.totalAcquired - summary.acquisitions.totalFinished, color: green[300] }
-                        ],
-                        arcLabel: (params) => params.label?.includes('Not') ? '' : params.label || '',
-                        arcLabelMinAngle: 20,
-                      },
-                    ]}
-                    slotProps={{
-                      legend: {
-                        direction: 'horizontal',
-                        position: { vertical: 'bottom', horizontal: 'center' }
+                  <GaugeComponent
+                    type="semicircle"
+                    arc={{
+                      width: 0.2,
+                      padding: 0.005,
+                      cornerRadius: 1,
+                      subArcs: [
+                        {
+                          limit: Math.ceil(summary.acquisitions.totalFinished / summary.acquisitions.totalAcquired * 100),
+                          color: green[500],
+                          showTick: true,
+                          tooltip: {
+                            text: 'Percent of acquired games that were beaten or completed.'
+                          },
+                        },
+                        {
+                          limit: Math.ceil(summary.acquisitions.totalPlayed / summary.acquisitions.totalAcquired * 100),
+                          color: blue[500],
+                          showTick: true,
+                          tooltip: {
+                            text: 'Percent of acquired games that were played.'
+                          }
+                        },
+                        {
+                          limit: 100,
+                          color: red[500],
+                          showTick: true,
+                          tooltip: {
+                            text: 'Total Games acquired'
+                          }
+                        },
+                      ]
+                    }}
+                    pointer={{
+                      color: '#345243',
+                      length: 0.90,
+                      width: 12,
+                    }}
+                    labels={{
+                      valueLabel: { formatTextValue: value => value + '%' },
+                      tickLabels: {
+                        type: 'outer',
+                        defaultTickValueConfig: {
+                          formatTextValue: (value: any) => value + '%',
+                          style: { fontSize: 10 }
+                        },
+                        ticks: Array.from('1'.repeat(10)).map((n, i) => { return { value: parseInt(n) * (i + 1) * 10 } })
                       }
                     }}
-                    height={300}
+                    value={Math.ceil(summary.acquisitions.totalPlayed / summary.acquisitions.totalAcquired * 100)}
+                    minValue={0}
+                    maxValue={100}
                   />
+
                 </Grid>
                 <Grid size={12}>
                   <Accordion>
