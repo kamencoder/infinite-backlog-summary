@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "vite",
+    "types": "tsc -b",
     "build": "tsc -b && vite build",
     "deploy": "gh-pages -d dist -u \"github-actions-bot <support+actions@github.com>\"",
     "lint": "eslint .",

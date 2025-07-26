@@ -6,12 +6,10 @@ import { DataContext, type GameEdit } from "../data/DataContext";
 
 export interface GameProps {
   game: SummaryGameInfo;
-  month: string;
-  onEdit: (game: SummaryGameInfo, editDetails: GameEdit) => void;
 }
 
 export const Game = (props: GameProps) => {
-  const { game, month, onEdit } = props;
+  const { game } = props;
 
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [menuElement, setMenuElement] = useState<null | HTMLElement>(null);

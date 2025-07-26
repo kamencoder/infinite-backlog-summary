@@ -1,37 +1,42 @@
 import { useEffect, useMemo, useState } from 'react'
 import CsvImporter from './components/data-importer'
 import { type CsvData, type Data, DataContext, type GameEdit, type UserData } from './data/DataContext';
-import { getYearSummary, type Summary, type SummaryGameInfo } from './data/summarizer';
+import { getYearSummary, type Summary } from './data/summarizer';
 import YearSummary from './components/year-summary';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Download } from '@mui/icons-material'
 import CssBaseline from '@mui/material/CssBaseline';
 import { Button } from '@mui/material';
 
-
 const initialUserData = JSON.parse(localStorage.getItem('user-data') || "{}");
 function App() {
 
+  // TODO: Move data context state into separate hook
   const [csvImportData, setCsvImportData] = useState<CsvData[]>();
   const [userData, setUserData] = useState<UserData>({ ...initialUserData, gameEdits: { ...initialUserData.gameEdits } });
-  const [summary, setSummary] = useState<Summary | null>(null);
+  const [baseSummary, setBaseSummary] = useState<Summary | null>(null);
 
-  // const summary = useMemo<Summary | null>((): Summary | null => {
-  //   console.log('Updating summary', { games: csvImportData?.length });
-  //   if (csvImportData && csvImportData.length > 0) {
-  //     return getYearSummary(csvImportData, userData, new Date().getFullYear());
-  //   }
-  //   return null;
-  // }, [csvImportData, userData]);
   useEffect(() => {
     console.log('Creating summary from CSV data', { games: csvImportData?.length });
     if (csvImportData && csvImportData.length > 0) {
-      const baseSummary = getYearSummary(csvImportData, userData, new Date().getFullYear());
-      setSummary(baseSummary);
+      const baseSummary = getYearSummary(csvImportData, new Date().getFullYear());
+      setBaseSummary(baseSummary);
     }
-  }, [csvImportData, userData]);
+  }, [csvImportData]);
 
 
+  const summary = useMemo((): Summary | null => {
+    if (!baseSummary) {
+      return baseSummary;
+    }
+    return {
+      ...baseSummary,
+      games: baseSummary.games.map(g => ({
+        ...g,
+        ...userData.gameEdits?.[g.id],
+      }))
+    }
+  }, [baseSummary, userData])
 
   const data = useMemo<Data>((): Data => {
     return {
@@ -44,7 +49,6 @@ function App() {
 
   const updateUserDataLocalStorage = () => {
     if (!summary) return;
-
     try {
       console.log('Saving user data to local storage');
       const currentUserData = JSON.parse(localStorage.getItem('user-data') || "{}");
@@ -105,7 +109,7 @@ function App() {
             {summary && (
               <YearSummary />
             )}
-            {data.games && (
+            {summary && (
               <Button
                 component="label"
                 variant="contained"
@@ -113,7 +117,7 @@ function App() {
                 startIcon={<Download />}
                 onClick={() => window.print()}
               >
-                Export
+                Print PDF
               </Button>
             )}
           </>

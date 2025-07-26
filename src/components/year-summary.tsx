@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { getPlayTimeInHours, type PlatformTotal, type Summary, type SummaryGameInfo } from '../data/summarizer';
+import { getPlayTimeInHours, type PlatformTotal, type SummaryGameInfo } from '../data/summarizer';
 import { LineChart, PieChart, BarChart } from '@mui/x-charts';
 import { green, blue, red } from '@mui/material/colors'
 import {
@@ -25,13 +25,11 @@ import { ExpandMore } from '@mui/icons-material'
 import { SingleStat } from './single-stat';
 import { DateTime } from 'luxon';
 import { Game } from './game';
-import { DataContext, type GameEdit } from '../data/DataContext';
-
-export interface YearSummaryProps { }
+import { DataContext } from '../data/DataContext';
 
 type PlatformPieTotal = PlatformTotal & { otherPlatformDetails?: string[] };
 
-export const YearSummary = (props: YearSummaryProps) => {
+export const YearSummary = () => {
   // const { summary } = props;
   const dataContext = useContext(DataContext);
   const { summary } = dataContext.data;
