@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, CardMedia, IconButton, Menu, MenuItem, Modal, Stack, Typography, TextField } from "@mui/material";
+import { Box, Button, Card, CardContent, CardMedia, IconButton, Menu, MenuItem, Modal, Stack, Typography, TextField, Rating } from "@mui/material";
 import { getPlayTimeInHours, type SummaryGameInfo } from "../data/summarizer";
 import { MoreVert, Search } from "@mui/icons-material";
 import { useContext, useState } from "react";
@@ -79,8 +79,9 @@ export const Game = (props: GameProps) => {
                   {getPlayTimeInHours(game.playTime, 1) + ((game.playTime || 0) > 1 ? ' hrs' : ' hr')}
                 </Typography>
               )}
+              <Rating size={"small"} name="game-rating" value={game.rating} precision={0.5} readOnly />
             </Stack>
-            <IconButton id={`edit-game-${game.id}`} onClick={handleMenuClick} size="small"><MoreVert /></IconButton>
+            <IconButton id={`edit-game-${game.id}`} onClick={handleMenuClick} size="small" sx={{ maxHeight: "2em" }}><MoreVert /></IconButton>
             <Menu
               anchorEl={menuElement}
               open={menuOpen}

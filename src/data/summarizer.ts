@@ -109,6 +109,7 @@ export type SummaryGameInfo = {
   completionMonth: string | null;
   playTime: number | null;
   coverImage: string | null;
+  rating: number | null;
 }
 
 export type LengthGroup = typeof LengthGroupEnum[keyof typeof LengthGroupEnum];
@@ -228,6 +229,8 @@ export const getYearSummary = (games: CsvData[], year: number): Summary => {
     const completionYear = completionDate?.year;
     const playTime = game['Playtime'] ? parseInt(game['Playtime'].toString()) : null
     const coverImage = game['Cover']?.toString() || null;
+    const ratingRaw = game['Rating (Score)']?.toString();
+    const rating = ratingRaw ? parseFloat(ratingRaw) / 2 : null; // comes in as 10 point raiting, need 
 
     let gameIncluded = false;
     if (completionYear && completionYear >= year && completionYear < (year + 1)) {
@@ -304,6 +307,7 @@ export const getYearSummary = (games: CsvData[], year: number): Summary => {
         playTime,
         coverImage,
         acquiredThisYear,
+        rating
       });
     }
   });
