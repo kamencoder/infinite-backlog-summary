@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Papa, { type ParseResult } from 'papaparse';
 import { type CsvData } from '../data/DataContext';
-import { DataContextProvider } from '../data/DataContext';
+import { DataContext } from '../data/DataContext';
 import { Box, Button, Link, List, ListItem, styled, Typography } from '@mui/material';
 import { UploadFile } from '@mui/icons-material';
 
@@ -19,7 +19,7 @@ const DataImporter = () => {
     width: 1,
   });
 
-  const dataContext = useContext(DataContextProvider);
+  const dataContext = useContext(DataContext);
   // const [ csvData, setCsvData ] = React.useState<CsvData[]>([]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

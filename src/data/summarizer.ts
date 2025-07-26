@@ -1,4 +1,4 @@
-import type { CsvData } from "./DataContext";
+import type { CsvData, UserData } from "./DataContext";
 import { DateTime } from "luxon";
 
 // YEARLY SUMMARY
@@ -186,7 +186,7 @@ const getLengthGroupByTimePlayed = (timePlayed: number | null): LengthGroup => {
   }
 }
 
-export const getYearSummary = (games: CsvData[], year: number): Summary => {
+export const getYearSummary = (games: CsvData[], userData: UserData, year: number): Summary => {
   const summary: Summary = {
     year,
     platformTotals: [],
@@ -227,7 +227,7 @@ export const getYearSummary = (games: CsvData[], year: number): Summary => {
     const completionDate = completionDateRaw ? DateTime.fromISO(completionDateRaw, { setZone: true }) : null;
     const completionYear = completionDate?.year;
     const playTime = game['Playtime'] ? parseInt(game['Playtime'].toString()) : null
-    const coverImage = game['Cover']?.toString() || null;
+    const coverImage = game['Cover']?.toString() || userData?.gameEdits?.[id]?.coverImage || null;
 
     let gameIncluded = false;
     if (completionYear && completionYear >= year && completionYear < (year + 1)) {

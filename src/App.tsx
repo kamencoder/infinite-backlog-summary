@@ -1,23 +1,71 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import CsvImporter from './components/data-importer'
-import { type Data, DataContextProvider } from './data/DataContext';
-import { getYearSummary } from './data/summarizer';
+import { type CsvData, type Data, DataContext, type GameEdit, type UserData } from './data/DataContext';
+import { getYearSummary, type Summary, type SummaryGameInfo } from './data/summarizer';
 import YearSummary from './components/year-summary';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Download } from '@mui/icons-material'
 import CssBaseline from '@mui/material/CssBaseline';
 import { Button } from '@mui/material';
 
+
+const initialUserData = JSON.parse(localStorage.getItem('user-data') || "{}");
 function App() {
-  const [data, setData] = useState<Data>({});
 
-  const summary = useMemo(() => {
-    if (data.games && data.games.length > 0) {
-      return getYearSummary(data.games, new Date().getFullYear());
+  const [csvImportData, setCsvImportData] = useState<CsvData[]>();
+  const [userData, setUserData] = useState<UserData>({ ...initialUserData, gameEdits: { ...initialUserData.gameEdits } });
+  const [summary, setSummary] = useState<Summary | null>(null);
+
+  // const summary = useMemo<Summary | null>((): Summary | null => {
+  //   console.log('Updating summary', { games: csvImportData?.length });
+  //   if (csvImportData && csvImportData.length > 0) {
+  //     return getYearSummary(csvImportData, userData, new Date().getFullYear());
+  //   }
+  //   return null;
+  // }, [csvImportData, userData]);
+  useEffect(() => {
+    console.log('Creating summary from CSV data', { games: csvImportData?.length });
+    if (csvImportData && csvImportData.length > 0) {
+      const baseSummary = getYearSummary(csvImportData, userData, new Date().getFullYear());
+      setSummary(baseSummary);
     }
-    return null;
-  }, [data.games]);
+  }, [csvImportData, userData]);
 
+
+
+  const data = useMemo<Data>((): Data => {
+    return {
+      games: csvImportData,
+      summary,
+      userData,
+    }
+  }, [csvImportData, summary])
+
+
+  const updateUserDataLocalStorage = () => {
+    if (!summary) return;
+
+    try {
+      console.log('Saving user data to local storage');
+      const currentUserData = JSON.parse(localStorage.getItem('user-data') || "{}");
+      localStorage.setItem('user-data', JSON.stringify({
+        ...currentUserData,
+        ...userData,
+        gameEdits: {
+          ...currentUserData?.gameEdits,
+          ...userData?.gameEdits,
+        }
+      }))
+    } catch (err) {
+      console.error('Unable to save user-data to local storage', err);
+    }
+  }
+
+  useEffect(() => {
+    if (userData) {
+      updateUserDataLocalStorage();
+    }
+  }, [userData])
 
   const darkTheme = createTheme({
     palette: {
@@ -29,15 +77,33 @@ function App() {
     <>
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-        <DataContextProvider
+        <DataContext
           value={{
             data,
-            setGames: (games) => setData({ ...data, games: games })
+            editGame: (gameId: string, gameEdit: GameEdit) => {
+              console.log('Game Edit saved', { gameId, gameEdit })
+              const newUserData = {
+                ...userData,
+                gameEdits: {
+                  ...data.userData?.gameEdits,
+                  [gameId]: {
+                    ...data.userData?.gameEdits[gameId],
+                    ...gameEdit
+                  }
+                }
+              }
+              console.log('New user data game info: ', newUserData.gameEdits[gameId])
+              setUserData(newUserData)
+            },
+            setGames: (games: CsvData[]) => {
+              console.log('Updating games');
+              setCsvImportData(games);
+            }
           }}>
           <>
             <CsvImporter />
             {summary && (
-              <YearSummary summary={summary} />
+              <YearSummary />
             )}
             {data.games && (
               <Button
@@ -51,7 +117,7 @@ function App() {
               </Button>
             )}
           </>
-        </DataContextProvider>
+        </DataContext>
 
       </ThemeProvider>
     </>

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { getPlayTimeInHours, type PlatformTotal, type Summary, type SummaryGameInfo } from '../data/summarizer';
 import { LineChart, PieChart, BarChart } from '@mui/x-charts';
 import { green, blue, red } from '@mui/material/colors'
@@ -25,15 +25,19 @@ import { ExpandMore } from '@mui/icons-material'
 import { SingleStat } from './single-stat';
 import { DateTime } from 'luxon';
 import { Game } from './game';
+import { DataContext, type GameEdit } from '../data/DataContext';
 
-export interface YearSummaryProps {
-  summary: Summary
-}
+export interface YearSummaryProps { }
 
 type PlatformPieTotal = PlatformTotal & { otherPlatformDetails?: string[] };
 
 export const YearSummary = (props: YearSummaryProps) => {
-  const { summary } = props;
+  // const { summary } = props;
+  const dataContext = useContext(DataContext);
+  const { summary } = dataContext.data;
+  if (!summary) {
+    return null;
+  }
 
   const sortedPlatformsByTotal = useMemo(() => summary.platformTotals.sort((a, b) => b.total - a.total), [summary.platformTotals]);
   const platforPie: PlatformPieTotal[] = useMemo(() => sortedPlatformsByTotal.reduce((acc: PlatformPieTotal[], platform: PlatformTotal) => {
