@@ -152,9 +152,16 @@ const getDecadeFromYear = (year: number | null): number => {
   return Math.floor(year / 10) * 10;
 }
 
-export const getPlayTimeInHours = (playTime: number | null): number | null => {
-  const hours = playTime ? Math.floor(playTime / 60) : null;
-  return hours;
+export const getPlayTimeInHours = (playTime: number | null, decimals?: number): number | null => {
+  if (!playTime) {
+    return null;
+  }
+  const hours = playTime / 60;
+  if (!decimals) {
+    return Math.floor(hours);
+  } else {
+    return parseFloat(hours.toFixed(decimals));
+  }
 }
 
 

@@ -24,6 +24,7 @@ import {
 import { ExpandMore } from '@mui/icons-material'
 import { SingleStat } from './single-stat';
 import { DateTime } from 'luxon';
+import { Game } from './game';
 
 export interface YearSummaryProps {
   summary: Summary
@@ -67,6 +68,7 @@ export const YearSummary = (props: YearSummaryProps) => {
   }, [summary.games]);
 
   const totalTimeSpent = getPlayTimeInHours(summary.totalTimeSpent) || 0;
+
   return (
     <Box sx={styles.yearSummaryContainer} id='year-summary-container'>
       <Typography variant="h1" fontWeight={700} textAlign="center">
@@ -250,13 +252,6 @@ export const YearSummary = (props: YearSummaryProps) => {
                       <Typography component="span">Acquired Game List</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      {/* <Stack justifyContent="flex-start">
-                        {summary.games.filter(g => g.acquiredThisYear).map(g => (
-                          <div style={{ textAlign: 'left' }}>
-                            {g.title} ({g.platformAbbreviation})- {g.acquisitionDate}
-                          </div>
-                        ))}
-                      </Stack> */}
                       <TableContainer component={Paper}>
                         <Table aria-label="Acquired Games">
                           <TableHead>
@@ -295,33 +290,9 @@ export const YearSummary = (props: YearSummaryProps) => {
             <Card variant="outlined" key={month} >
               <CardContent>
                 <Typography key={month} variant="h6" fontWeight={600} style={{ textAlign: 'left' }} gutterBottom>{month}</Typography>
+                {/* <GameList games={gamesByMonth[month]?.gamesFinished} /> */}
                 <Grid size={12} container spacing={2} justifyContent="center">
-                  {
-                    gamesByMonth[month].gamesFinished.map((game, index) => (
-                      <Grid size="auto" key={index}>
-                        <Card sx={{ height: '100%', width: "180px" }} >
-                          <CardContent>
-                            <img src={game.coverImage || ''} style={{ objectFit: "cover", width: "100%" }} />
-                            <Typography variant="body1" fontWeight="bold">
-                              {game.title}
-                            </Typography>
-                            <Stack spacing={1} mt={1}>
-                              <Typography variant="body2">
-                                {game.platformAbbreviation} - {game.releaseYear}
-                              </Typography>
-                              {game.playTime && (
-                                <Typography variant="body2">
-                                  {getPlayTimeInHours(game.playTime) + ((game.playTime || 0) > 1 ? ' hrs' : ' hr')}
-                                </Typography>
-                              )}
-                            </Stack>
-                          </CardContent>
-                        </Card>
-                        {/* {game.completion === 'Completed' && (<div style={{ width: '16px', height: '20px', position: 'absolute', bottom: "12px", right: "-6px", borderRadius: "50%", fontSize: '20px' }}>⭐</div>)} */}
-                        {/* </div> */}
-                      </Grid>
-                    ))
-                  }
+                  {gamesByMonth[month]?.gamesFinished.map(game => <Game game={game} />)}
                 </Grid>
               </CardContent>
             </Card>
