@@ -31,7 +31,6 @@ import { DataContext } from '../data/DataContext';
 type PlatformPieTotal = PlatformTotal & { otherPlatformDetails?: string[] };
 
 export const YearSummary = () => {
-  // const { summary } = props;
   const dataContext = useContext(DataContext);
   const { summary } = dataContext.data;
   if (!summary) {
@@ -85,8 +84,6 @@ export const YearSummary = () => {
         <Grid size={12}>
           <Card >
             <CardContent>
-              {/* <Typography variant="h6">Totals</Typography> */}
-              {/* <Divider sx={{ my: 1 }} /> */}
               <Stack spacing={1} direction="row" sx={{
                 justifyContent: "center",
                 alignItems: "center"

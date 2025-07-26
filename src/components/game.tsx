@@ -81,7 +81,7 @@ export const Game = (props: GameProps) => {
               )}
               <Rating size={"small"} name="game-rating" value={game.rating} precision={0.5} readOnly />
             </Stack>
-            <IconButton id={`edit-game-${game.id}`} onClick={handleMenuClick} size="small" sx={{ maxHeight: "2em" }}><MoreVert /></IconButton>
+            <IconButton id={`edit-game-${game.id}`} onClick={handleMenuClick} size="small" sx={{ maxHeight: "2em", alignSelf: 'flex-end' }}><MoreVert /></IconButton>
             <Menu
               anchorEl={menuElement}
               open={menuOpen}
@@ -106,7 +106,7 @@ export const Game = (props: GameProps) => {
       >
         <Box sx={modalStyle} display="flex" flexDirection="column" gap="10px">
           <Typography variant="h4" id="edit-modal-title">Edit</Typography>
-          <Box sx={{ minHeight: "160px" }}>
+          <Box sx={{ minHeight: "150px" }}>
             <Box display="flex">
               <TextField sx={{ flex: '1' }} label="Cover Image" value={coverImage} onChange={(e) => setCoverImage(e.target.value)} ></TextField>
               <IconButton onClick={() => {

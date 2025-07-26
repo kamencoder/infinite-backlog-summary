@@ -61,7 +61,7 @@ const LengthGroupSorting = {
 }
 const platformAbbreviations: { [key: string]: string } = {
   'Windows PC': 'PC',
-  'Web Browser': 'Web',
+  'Web browser': 'Web',
   'Nintendo Entertainment System': 'NES',
   'Family Computer': 'Famicom',
   'Super Famicom': 'SFC',
