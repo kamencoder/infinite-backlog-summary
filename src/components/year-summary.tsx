@@ -10,7 +10,6 @@ import {
   Grid,
   Paper,
   Stack,
-  Divider,
   Accordion,
   AccordionSummary,
   AccordionDetails,
@@ -20,6 +19,7 @@ import {
   TableRow,
   TableCell,
   TableHead,
+  type Theme,
 } from '@mui/material';
 import { ExpandMore } from '@mui/icons-material'
 import { SingleStat } from './single-stat';
@@ -68,16 +68,20 @@ export const YearSummary = (props: YearSummaryProps) => {
 
   const totalTimeSpent = getPlayTimeInHours(summary.totalTimeSpent) || 0;
   return (
-    <Box sx={{ p: 3 }} id='year-summary-container'>
-      <Typography variant="h4" gutterBottom>
-        Year Summary ({summary.year})
+    <Box sx={styles.yearSummaryContainer} id='year-summary-container'>
+      <Typography variant="h1" fontWeight={700} textAlign="center">
+        {summary.year}
       </Typography>
+      <Typography variant="subtitle1" textAlign="center" gutterBottom>
+        Yearly Summary
+      </Typography>
+      <h4 style={{ textAlign: 'center' }}>{ }</h4>
       <Grid container spacing={3}>
         <Grid size={12}>
-          <Card variant="outlined">
+          <Card >
             <CardContent>
-              <Typography variant="h6">Totals</Typography>
-              <Divider sx={{ my: 1 }} />
+              {/* <Typography variant="h6">Totals</Typography> */}
+              {/* <Divider sx={{ my: 1 }} /> */}
               <Stack spacing={1} direction="row" sx={{
                 justifyContent: "center",
                 alignItems: "center"
@@ -291,14 +295,13 @@ export const YearSummary = (props: YearSummaryProps) => {
             <Card variant="outlined" key={month} >
               <CardContent>
                 <Typography key={month} variant="h6" fontWeight={600} style={{ textAlign: 'left' }} gutterBottom>{month}</Typography>
-                <Grid container spacing={4}>
+                <Grid size={12} container spacing={2} justifyContent="center">
                   {
                     gamesByMonth[month].gamesFinished.map((game, index) => (
-                      <Grid size={{ xs: 6, md: 2 }} minWidth={160} key={index}>
-                        {/* <div style={{ position: "relative" }}> */}
-                        <Card sx={{ height: '100%', width: "180px" }}>
+                      <Grid size="auto" key={index}>
+                        <Card sx={{ height: '100%', width: "180px" }} >
                           <CardContent>
-                            <img src={game.coverImage || ''} style={{ objectFit: "cover", width: "140px" }} />
+                            <img src={game.coverImage || ''} style={{ objectFit: "cover", width: "100%" }} />
                             <Typography variant="body1" fontWeight="bold">
                               {game.title}
                             </Typography>
@@ -328,5 +331,16 @@ export const YearSummary = (props: YearSummaryProps) => {
     </Box >
   );
 }
+
+const styles = {
+  yearSummaryContainer: (theme: Theme) => ({
+    maxWidth: "1024px",
+    margin: "auto",
+    padding: 3,
+    [theme.breakpoints.down('sm')]: {
+      padding: 0
+    }
+  })
+};
 
 export default YearSummary;

@@ -10,9 +10,9 @@ export const SingleStat = (props: SingleStatProps) => {
   const { value, label, color } = props;
   return (
     <div className="single-stat">
-      <Box style={{ backgroundColor: color, padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
-        <div><Typography fontSize={20} fontWeight={900}>{value}</Typography></div>
-        <div><Typography>{label}</Typography></div>
+      <Box style={{ textAlign: "center", margin: "10px" }}>
+        <Box><Typography fontSize={38} color={color} fontWeight={900}>{value}</Typography></Box>
+        <Box><Typography fontSize={14} color={color}>{label}</Typography></Box>
       </Box>
     </div>
   )

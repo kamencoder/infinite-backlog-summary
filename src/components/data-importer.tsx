@@ -52,7 +52,7 @@ const DataImporter = () => {
             flexDirection="column"
           >
             <Typography variant='subtitle1'>Infinite Backlog</Typography>
-            <Typography variant='h2' gutterBottom>Yearly Summary</Typography>
+            <Typography variant='h2' textAlign="center" gutterBottom>Yearly Summary</Typography>
             <Box sx={{ alignItems: "left", marginBottom: "16px" }} >
               <List >
                 <ListItem>
