@@ -55,7 +55,7 @@ export const Game = (props: GameProps) => {
 
   return (
     <>
-      <Card sx={{ height: '100%', width: "180px" }} >
+      <Card sx={{ height: '100%', flex: 'auto', minWidth: '160px', maxWidth: '180px' }} >
         {game.coverImage && <CardMedia
           sx={{ height: '240px' }}
           image={game.coverImage || ''}
